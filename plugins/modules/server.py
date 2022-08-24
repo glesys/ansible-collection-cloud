@@ -3,7 +3,7 @@ import time
 
 DOCUMENTATION = '''
 ---
-module: glesys_server
+module: server
 
 short_description: Manage server in GleSYS Cloud (https://cloud.glesys.com)
 
@@ -40,7 +40,9 @@ options:
 
 
 author:
-    - Your Name (@yourhandle)
+    - Magnus Johansson <magnus@glesys.se>
+    - Lars Dunemark <lars.dunemark@glesys.se>
+    - Andreas Nilsson <andreas.nilsson@glesys.se>
 '''
 
 EXAMPLES = '''
@@ -54,7 +56,7 @@ EXAMPLES = '''
 
   tasks:
   - name: create new server at glesys
-    glesys_server:
+    glesys.cloud.server:
       hostname: host01.example.com
       state: present
       project: "{{glesys_project}}"
@@ -79,42 +81,42 @@ EXAMPLES = '''
     with_items: "{{ server.server.iplist }}"
 
   - name: stopp server
-    glesys_server:
+    glesys.cloud.server:
       hostname: host01.example.com
       state: stopped
       project: "{{glesys_project}}"
       apikey: "{{glesys_api_key}}"
 
   - name: reboot server
-    glesys_server:
+    glesys.cloud.server:
       hostname: host01.example.com
       state: rebooted
       project: "{{glesys_project}}"
       apikey: "{{glesys_api_key}}"
 
   - name: poweron server
-    glesys_server:
+    glesys.cloud.server:
       hostname: host01.example.com
       state: running
       project: "{{glesys_project}}"
       apikey: "{{glesys_api_key}}"
 
   - name: update disk
-    glesys_server:
+    glesys.cloud.server:
       serverid: wpsXXXXXXX
       disk: 40
       project: "{{glesys_project}}"
       apikey: "{{glesys_api_key}}"
 
   - name: Change hostname
-    glesys_server:
+    glesys.cloud.server:
       serverid: wpsxxxxx
       hostname: bengt.se
       project: "{{glesys_project}}"
       apikey: "{{glesys_api_key}}"
 
   - name: Remove server
-    glesys_server:
+    glesys.cloud.server:
       id: server.id  # Or hostname
       state: absent
       project: "{{glesys_project}}"
