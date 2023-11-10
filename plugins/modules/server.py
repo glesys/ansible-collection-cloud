@@ -293,9 +293,9 @@ class GlesysApi:
             error = self.module.from_json(info['body'])
 
             self.module.fail_json(msg=error["response"]["status"]["text"])
-
-        res = response.read()
-        if not res:
+        try:
+            res = response.read()
+        except AttributeError:
             return {}
 
         return self.module.from_json(to_text(res))
@@ -378,7 +378,6 @@ class GlesysRunner(object):
 
             if target_state == active_state:
                 break
-
             time.sleep(1)
 
     def wait_for_server_lock(self, serverid):
@@ -406,9 +405,10 @@ class GlesysRunner(object):
             changed = False
             if server is None:
                 # Server not found, go ahead and create the server.
-                server = self.create_server()
-                self.wait_for_server_state(server.serverid(), "running")
+                self.create_server()
                 time.sleep(1)
+                server = self.api.get_server(self, hostname=self.module.params.get("hostname"))
+                self.wait_for_server_state(server.serverid(), "running")
                 changed = True
             else:
                 # Server found , do necessary changes
