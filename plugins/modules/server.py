@@ -246,7 +246,7 @@ class GlesysApi:
         }
 
         self.post("server", "create", params)
-        
+
 
     def remove_server(self, serverid):
         params = {
@@ -393,6 +393,7 @@ class GlesysRunner(object):
                 # Server not found OK.
                 self.module.exit_json(changed=False, msg="Server already absent")
             else:
+                self.wait_for_server_lock(server.serverid())
                 self.api.remove_server(server.serverid())
                 self.module.exit_json(changed=True, msg="Server " + server.serverid() + " deleted")
 
