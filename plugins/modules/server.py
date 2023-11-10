@@ -293,9 +293,9 @@ class GlesysApi:
             error = self.module.from_json(info['body'])
 
             self.module.fail_json(msg=error["response"]["status"]["text"])
-        try:
-            res = response.read()
-        except AttributeError:
+        
+        res = response.read()
+        if not res:
             return {}
 
         return self.module.from_json(to_text(res))
