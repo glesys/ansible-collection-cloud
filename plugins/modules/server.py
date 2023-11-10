@@ -245,8 +245,8 @@ class GlesysApi:
             "ssh_pub_key": ssh_pub_key
         }
 
-        serverjson = self.post("server", "create", params)
-        return serverjson["response"]["server"]
+        self.post("server", "create", params)
+        
 
     def remove_server(self, serverid):
         params = {
@@ -352,7 +352,7 @@ class GlesysRunner(object):
         #    module.fail_json(msg="server not found and serverid specified,"
         #                             " use hostname to create new servers")
 
-        server_json = self.api.create_server(hostname=self.module.params.get("hostname"),
+        self.api.create_server(hostname=self.module.params.get("hostname"),
                                         datacenter=self.module.params.get("datacenter"),
                                         platform=self.module.params.get("platform"),
                                         template=self.module.params.get("template"),
@@ -364,9 +364,6 @@ class GlesysRunner(object):
                                         bandwidth=self.module.params.get("bandwidth"),
                                         description=self.module.params.get("description"),
                                         users=self.module.params.get("users"))
-
-        # TODO: wait
-        return AnsibleGlesysServer(server_json, self.api)
 
     def wait_for_server_state(self, serverid, target_state):
         while True:
