@@ -293,7 +293,7 @@ class GlesysApi:
             error = self.module.from_json(info['body'])
 
             self.module.fail_json(msg=error["response"]["status"]["text"])
-        
+
         res = response.read()
         if not res:
             return {}
