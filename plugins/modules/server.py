@@ -248,7 +248,6 @@ class GlesysApi:
         serverjson = self.post("server", "create", params)
         return serverjson["response"]["server"]
 
-
     def remove_server(self, serverid):
         params = {
             "serverid": serverid,
@@ -367,8 +366,10 @@ class GlesysRunner(object):
                                         bandwidth=self.module.params.get("bandwidth"),
                                         description=self.module.params.get("description"),
                                         users=self.module.params.get("users"))
+
         # TODO: wait
         return AnsibleGlesysServer(server_json, self.api)
+
     def wait_for_server_state(self, serverid, target_state):
         while True:
             active_state = self.api.get_server_status(serverid)
@@ -379,6 +380,7 @@ class GlesysRunner(object):
 
             if target_state == active_state:
                 break
+
             time.sleep(1)
 
     def wait_for_server_lock(self, serverid):
@@ -407,10 +409,9 @@ class GlesysRunner(object):
             changed = False
             if server is None:
                 # Server not found, go ahead and create the server.
-                self.create_server()
-                time.sleep(1)
-                server = self.api.get_server(self, hostname=self.module.params.get("hostname"))
+                server = self.create_server()
                 self.wait_for_server_state(server.serverid(), "running")
+                time.sleep(1)
                 changed = True
             else:
                 # Server found , do necessary changes
