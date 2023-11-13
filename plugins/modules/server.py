@@ -310,6 +310,7 @@ class GlesysApi:
             module=self.module,
             url=url,
             method="GET",
+            timeout=20,
             headers={
                 "Accept": "application/json",
                 "Authorization": basic_auth_header(self.project, self.apikey)
@@ -329,6 +330,7 @@ class GlesysApi:
             module=self.module,
             url=url,
             method="POST",
+            timeout=20,
             headers={
                 "Accept": "application/json",
                 "Content-type": "application/json",
@@ -397,6 +399,7 @@ class GlesysRunner(object):
                 # Server not found OK.
                 self.module.exit_json(changed=False, msg="Server already absent")
             else:
+                self.wait_for_server_lock(server.serverid())
                 self.api.remove_server(server.serverid())
                 self.module.exit_json(changed=True, msg="Server " + server.serverid() + " deleted")
 
